@@ -1,4 +1,4 @@
-package com.example.aqbuddy.presentation.register
+package com.example.aqbuddy.presentation.login
 
 import android.content.Context
 import android.widget.Toast
@@ -14,7 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
@@ -41,12 +40,13 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.aqbuddy.utils.Screen
 
 @Composable
-fun RegisterScreen(
+fun LoginScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     ShowToast()
     ShowToastSuccess()
@@ -56,20 +56,8 @@ fun RegisterScreen(
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        IconButton(
-            modifier = Modifier.align(Alignment.Start),
-            onClick = {
-                navController.popBackStack()
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Back"
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Register",
+            text = "Login",
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Bold,
             fontStyle = MaterialTheme.typography.headlineLarge.fontStyle,
@@ -128,7 +116,7 @@ fun RegisterScreen(
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                viewModel.register()
+                viewModel.login()
             }
         ) {
             if (viewModel.isLoading) {
@@ -139,7 +127,7 @@ fun RegisterScreen(
                 )
             } else {
                 Text(
-                    text = "Register",
+                    text = "Login",
                     fontStyle = MaterialTheme.typography.labelLarge.fontStyle,
                 )
             }
@@ -147,7 +135,7 @@ fun RegisterScreen(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             buildAnnotatedString {
-                append("Already have account? ")
+                append("Don't have account yet? ")
 
                 withStyle(
                     style = SpanStyle(
@@ -155,13 +143,13 @@ fun RegisterScreen(
                         textDecoration = TextDecoration.Underline
                     )
                 ) {
-                    append("Login Here!")
+                    append("Create Account Now!")
                 }
             },
             fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
             modifier = Modifier
                 .clickable {
-                    navController.popBackStack()
+                    navController.navigate(Screen.RegisterScreen)
                 }
         )
     }
@@ -170,7 +158,7 @@ fun RegisterScreen(
 @Composable
 fun ShowToast(
     context: Context = LocalContext.current,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.errorMsg) {
         if (viewModel.errorMsg.isNotEmpty()) {
@@ -183,11 +171,11 @@ fun ShowToast(
 @Composable
 fun ShowToastSuccess(
     context: Context = LocalContext.current,
-    viewModel: RegisterViewModel = hiltViewModel()
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
     LaunchedEffect(viewModel.isSuccess) {
         if (viewModel.isSuccess) {
-            Toast.makeText(context, "Register Success", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Login Success", Toast.LENGTH_SHORT).show()
             viewModel.isSuccess = false
         }
     }
