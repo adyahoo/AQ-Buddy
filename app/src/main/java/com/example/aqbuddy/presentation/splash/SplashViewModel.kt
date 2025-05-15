@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SplashViewModel @Inject constructor(
     private val sharedPref: MySharedPref,
-    val sessionStateHolder: SessionStateHolder
+    private val sessionStateHolder: SessionStateHolder
 ) : ViewModel() {
 
     init {

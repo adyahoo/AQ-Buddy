@@ -76,6 +76,19 @@ fun RegisterScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
         OutlinedTextField(
+            value = viewModel.name,
+            onValueChange = {
+                viewModel.name = it
+            },
+            label = { Text("Username") },
+            placeholder = { Text("Input your name here") },
+            shape = RoundedCornerShape(10.dp),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        OutlinedTextField(
             value = viewModel.email,
             onValueChange = {
                 viewModel.email = it

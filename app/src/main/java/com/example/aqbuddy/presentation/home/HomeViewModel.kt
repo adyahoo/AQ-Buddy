@@ -11,9 +11,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val sessionStateHolder: SessionStateHolder,
-    private val sharedPref: MySharedPref
+    private val sharedPref: MySharedPref,
 ) : ViewModel() {
-
     fun logout() {
         sharedPref.setPref(Constants.USER_LOGIN_KEY, false)
         sessionStateHolder.updateIsLoggedInState(SessionState.LoggedOut)

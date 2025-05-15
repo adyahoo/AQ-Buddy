@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.padding(innerPadding)
                         ) {
                             composable<Screen.SplashScreen> {
-                                SplashScreen(navController = navController)
+                                SplashScreen()
                             }
                             navigation<Screen.Authenticated>(startDestination = Screen.HomeScreen) {
                                 composable<Screen.HomeScreen> {

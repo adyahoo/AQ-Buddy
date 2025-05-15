@@ -30,7 +30,6 @@ import com.example.aqbuddy.utils.Screen
 @Composable
 fun SplashScreen(
     modifier: Modifier = Modifier,
-    navController: NavController,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
     Column(

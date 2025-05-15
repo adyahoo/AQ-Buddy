@@ -1,7 +1,9 @@
 package com.example.aqbuddy.di
 
 import com.example.aqbuddy.data.repository.FBaseAuthRepositoryImpl
+import com.example.aqbuddy.data.repository.FBaseProfileRepositoryImpl
 import com.example.aqbuddy.domain.repository.FBaseAuthRepository
+import com.example.aqbuddy.domain.repository.FBaseProfileRepository
 import com.example.aqbuddy.ui.SessionStateHolder
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -21,6 +23,12 @@ class AppModules {
     @Singleton
     fun provideFBaseAuthRepository(firebaseAuth: FirebaseAuth): FBaseAuthRepository {
         return FBaseAuthRepositoryImpl(firebaseAuth)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFBaseProfileRepository(firebaseAuth: FirebaseAuth): FBaseProfileRepository {
+        return FBaseProfileRepositoryImpl(firebaseAuth)
     }
 
     @Provides

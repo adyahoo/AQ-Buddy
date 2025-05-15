@@ -17,6 +17,7 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val registerUseCase: FBaseRegisterUseCase,
 ) : ViewModel() {
+    var name by mutableStateOf("")
     var email by mutableStateOf("")
     var password by mutableStateOf("")
     var isShowPassword by mutableStateOf(false)
@@ -29,7 +30,7 @@ class RegisterViewModel @Inject constructor(
     }
 
     fun register() {
-        registerUseCase(email, password).onEach { res ->
+        registerUseCase(name, email, password).onEach { res ->
             when (res) {
                 is Resource.Success -> {
                     isLoading = false

@@ -14,7 +14,6 @@ val LocalSessionState = compositionLocalOf<SessionState> {
 fun SessionProvider(sessionStateHolder: SessionStateHolder, content: @Composable () -> Unit) {
     val sessionState by sessionStateHolder.isLoggedIn.collectAsState()
 
-    println("ahhay"+sessionState.toString())
     CompositionLocalProvider(
         LocalSessionState provides sessionState
     ) {
