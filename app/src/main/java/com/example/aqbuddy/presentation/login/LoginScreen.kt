@@ -44,8 +44,8 @@ import com.example.aqbuddy.utils.Screen
 
 @Composable
 fun LoginScreen(
-    modifier: Modifier = Modifier,
     navController: NavController,
+    modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     ShowToast()

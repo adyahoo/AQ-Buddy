@@ -15,6 +15,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.example.aqbuddy.presentation.home.HomeScreen
 import com.example.aqbuddy.presentation.login.LoginScreen
+import com.example.aqbuddy.presentation.map.MapScreen
 import com.example.aqbuddy.presentation.register.RegisterScreen
 import com.example.aqbuddy.presentation.splash.SplashScreen
 import com.example.aqbuddy.ui.LocalSessionState
@@ -78,9 +79,12 @@ class MainActivity : ComponentActivity() {
                             composable<Screen.SplashScreen> {
                                 SplashScreen()
                             }
-                            navigation<Screen.Authenticated>(startDestination = Screen.HomeScreen) {
+                            navigation<Screen.Authenticated>(startDestination = Screen.MapScreen) {
                                 composable<Screen.HomeScreen> {
                                     HomeScreen(navController = navController)
+                                }
+                                composable<Screen.MapScreen> {
+                                    MapScreen(navController = navController)
                                 }
                             }
                             navigation<Screen.Unauthenticated>(startDestination = Screen.LoginScreen) {

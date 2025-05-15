@@ -96,4 +96,8 @@ dependencies {
 
     // Serialization
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1")
+
+    // Open Street Map
+    implementation("org.osmdroid:osmdroid-android:6.1.16")
+    implementation("tech.utsmankece:osm-android-compose:0.0.5")
 }

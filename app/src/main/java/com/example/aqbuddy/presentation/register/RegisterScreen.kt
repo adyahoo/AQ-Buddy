@@ -44,8 +44,8 @@ import androidx.navigation.NavController
 
 @Composable
 fun RegisterScreen(
-    modifier: Modifier = Modifier,
     navController: NavController,
+    modifier: Modifier = Modifier,
     viewModel: RegisterViewModel = hiltViewModel()
 ) {
     ShowToast()

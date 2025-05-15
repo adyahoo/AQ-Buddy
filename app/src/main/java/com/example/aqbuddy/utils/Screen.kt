@@ -14,4 +14,5 @@ object Screen {
     // Authenticated Route
     @Serializable object Authenticated
     @Serializable object HomeScreen
+    @Serializable object MapScreen
 }

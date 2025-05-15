@@ -12,8 +12,8 @@ import androidx.navigation.NavController
 
 @Composable
 fun HomeScreen(
-    modifier: Modifier = Modifier,
     navController: NavController,
+    modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     Column(
