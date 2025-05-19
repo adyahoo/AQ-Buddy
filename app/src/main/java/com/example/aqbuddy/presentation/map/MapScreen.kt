@@ -22,23 +22,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.utsman.osmandcompose.DefaultMapProperties
 import com.utsman.osmandcompose.Marker
-import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
-import com.utsman.osmandcompose.ZoomButtonVisibility
+import com.utsman.osmandcompose.OsmAndroidComposable
 import com.utsman.osmandcompose.rememberCameraState
-import com.utsman.osmandcompose.rememberMarkerState
-import com.utsman.osmandcompose.rememberOverlayManagerState
-import org.osmdroid.util.GeoPoint
-import org.osmdroid.views.overlay.CopyrightOverlay
-import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay
 
 @Composable
 fun MapScreen(
@@ -66,7 +58,7 @@ fun MapScreen(
         )
 
         // loading overlay
-        if(viewModel.state.value.isLoading) {
+        if (viewModel.state.value.isLoading) {
             RenderLoadingOverlay()
         }
     }
@@ -94,36 +86,22 @@ fun RenderMap(
     ) {
         for (marker in viewModel.state.value.markers) {
             Marker(
+                id = marker.title,
                 state = marker.state,
-                title = marker.title,
-                icon = null,
-                snippet = marker.score.toString()
             ) {
-//                Box(
-//                    modifier = Modifier
-//                        .size(64.dp)
-//                        .clip(RoundedCornerShape(12.dp))
-//                        .background(marker.color!!, RoundedCornerShape(12.dp))
-//                ) {
-//                    Text(
-//                        text = marker.score.toString(),
-//                        color = Color.White,
-//                        fontSize = 16.sp,
-//                        fontWeight = FontWeight.Bold,
-//                        modifier = Modifier.align(Alignment.Center)
-//                    )
-//                }
-                // create info window node
-                Column(
+                Box(
                     modifier = Modifier
-                        .size(100.dp)
-                        .background(color = Color.Gray, shape = RoundedCornerShape(7.dp)),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .size(64.dp)
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(marker.color!!, RoundedCornerShape(12.dp))
                 ) {
-                    // setup content of info window
-                    Text(text = it.title)
-                    Text(text = it.snippet, fontSize = 10.sp)
+                    Text(
+                        text = marker.score.toString(),
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
                 }
             }
         }
