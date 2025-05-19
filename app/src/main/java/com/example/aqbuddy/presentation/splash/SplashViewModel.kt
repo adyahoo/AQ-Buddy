@@ -1,14 +1,10 @@
 package com.example.aqbuddy.presentation.splash
 
 import android.os.Handler
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.aqbuddy.data.local.MySharedPref
-import com.example.aqbuddy.ui.SessionState
-import com.example.aqbuddy.ui.SessionStateHolder
+import com.example.aqbuddy.ui.provider.session_provider.SessionState
+import com.example.aqbuddy.ui.provider.session_provider.SessionStateHolder
 import com.example.aqbuddy.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject

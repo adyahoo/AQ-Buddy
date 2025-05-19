@@ -75,7 +75,8 @@ dependencies {
 
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
-    implementation(libs.firebase.auth)
+    implementation("com.google.firebase:firebase-auth:23.2.0")
+    implementation("com.google.firebase:firebase-firestore")
 
     // Hilt DI
     implementation("com.google.dagger:hilt-android:2.56.2")

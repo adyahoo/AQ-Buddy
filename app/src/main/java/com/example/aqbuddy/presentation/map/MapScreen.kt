@@ -1,18 +1,31 @@
 package com.example.aqbuddy.presentation.map
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.MyLocation
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.AbsoluteAlignment
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.utsman.osmandcompose.DefaultMapProperties
@@ -34,42 +47,149 @@ fun MapScreen(
     viewModel: MapViewModel = hiltViewModel()
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
-        // define camera state
-        val cameraState = rememberCameraState {
-            geoPoint = GeoPoint(
-                -7.75819934849922,
-                110.37242862161,
-            )
-            zoom = 20.0 // optional, default is 5.0
-        }
+        // map
+        RenderMap(navController)
 
-        // map properties
-        var mapProperties by remember {
-            mutableStateOf(DefaultMapProperties)
-        }
+        // back button
+        RenderBackButton(
+            navController = navController,
+            modifier = Modifier.padding(16.dp)
+        )
 
-        SideEffect {
-            mapProperties = mapProperties
-                .copy(zoomButtonVisibility = ZoomButtonVisibility.ALWAYS)
-        }
+        // current location button
+        RenderCurrentLocation(
+            modifier = Modifier
+                .padding(32.dp)
+                .align(AbsoluteAlignment.BottomRight)
+        )
 
-        // add node
-        OpenStreetMap(
-            modifier = Modifier.fillMaxSize(),
-            cameraState = cameraState,
-            properties = mapProperties,
-            onFirstLoadListener = {
-                viewModel.loadMarker()
+        // loading overlay
+        if(viewModel.state.value.isLoading) {
+            RenderLoadingOverlay()
+        }
+    }
+}
+
+@Composable
+fun RenderMap(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+    viewModel: MapViewModel = hiltViewModel()
+) {
+    // define camera state
+    val cameraState = rememberCameraState {
+        geoPoint = viewModel.currentGeoPoint
+        zoom = 20.0
+    }
+
+    // map node
+    OpenStreetMap(
+        modifier = modifier.fillMaxSize(),
+        cameraState = cameraState,
+        onFirstLoadListener = {
+            viewModel.getNearbyAqi()
+        }
+    ) {
+        for (marker in viewModel.state.value.markers) {
+            Marker(
+                state = marker.state,
+                title = marker.title,
+                icon = null,
+                snippet = marker.score.toString()
+            ) {
+//                Box(
+//                    modifier = Modifier
+//                        .size(64.dp)
+//                        .clip(RoundedCornerShape(12.dp))
+//                        .background(marker.color!!, RoundedCornerShape(12.dp))
+//                ) {
+//                    Text(
+//                        text = marker.score.toString(),
+//                        color = Color.White,
+//                        fontSize = 16.sp,
+//                        fontWeight = FontWeight.Bold,
+//                        modifier = Modifier.align(Alignment.Center)
+//                    )
+//                }
+                // create info window node
+                Column(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .background(color = Color.Gray, shape = RoundedCornerShape(7.dp)),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // setup content of info window
+                    Text(text = it.title)
+                    Text(text = it.snippet, fontSize = 10.sp)
+                }
             }
-        ) {
-            for (marker in viewModel.markers) {
-                Marker(
-                    state = marker.state,
-                    title = marker.title
-                )
-            }
         }
+    }
+}
+
+@Composable
+fun RenderBackButton(
+    navController: NavController,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(Color.White)
+            .clickable {
+                navController.popBackStack()
+            }
+            .padding(8.dp)
+    ) {
+        Icon(
+            Icons.Rounded.ArrowBack,
+            contentDescription = "Back Button",
+            tint = Color.Black,
+        )
+    }
+}
+
+@Composable
+fun RenderCurrentLocation(
+    modifier: Modifier = Modifier,
+    viewModel: MapViewModel = hiltViewModel()
+) {
+    Box(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(Color.White)
+            .clickable {
+                viewModel.getCurrentLocation()
+            }
+            .padding(8.dp)
+    ) {
+        Icon(
+            Icons.Rounded.MyLocation,
+            contentDescription = "Back Button",
+            tint = Color.Black,
+            modifier = Modifier.size(32.dp)
+        )
+    }
+}
+
+@Composable
+fun RenderLoadingOverlay(
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.Gray.copy(alpha = 0.5f))
+    ) {
+        CircularProgressIndicator(
+            color = Color.White,
+            strokeWidth = 2.dp,
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(32.dp)
+        )
     }
 }

@@ -218,9 +218,12 @@ val surfaceContainerDarkHighContrast = Color(0xFF2C3134)
 val surfaceContainerHighDarkHighContrast = Color(0xFF373C3F)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF42484A)
 
-
-
-
+val aqiGoodColor = Color(0xFFacd162)
+val aqiModerateColor = Color(0xFFf8d461)
+val aqiUnhealthySensitiveColor = Color(0xFFfa9956)
+val aqiUnhealthyColor = Color(0xFFf6686a)
+val aqiVeryUnhealthyColor = Color(0xFFa47db8)
+val aqiHazardousColor = Color(0xFFa07785)
 
 
 

@@ -18,14 +18,13 @@ import com.example.aqbuddy.presentation.login.LoginScreen
 import com.example.aqbuddy.presentation.map.MapScreen
 import com.example.aqbuddy.presentation.register.RegisterScreen
 import com.example.aqbuddy.presentation.splash.SplashScreen
-import com.example.aqbuddy.ui.LocalSessionState
-import com.example.aqbuddy.ui.SessionProvider
-import com.example.aqbuddy.ui.SessionState
-import com.example.aqbuddy.ui.SessionStateHolder
+import com.example.aqbuddy.ui.provider.session_provider.LocalSessionState
+import com.example.aqbuddy.ui.provider.session_provider.SessionProvider
+import com.example.aqbuddy.ui.provider.session_provider.SessionState
+import com.example.aqbuddy.ui.provider.session_provider.SessionStateHolder
 import com.example.aqbuddy.ui.theme.AppTheme
 import com.example.aqbuddy.utils.Screen
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.migration.CustomInjection.inject
 import javax.inject.Inject
 
 @AndroidEntryPoint
