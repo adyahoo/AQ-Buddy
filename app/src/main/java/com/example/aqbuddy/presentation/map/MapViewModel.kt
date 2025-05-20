@@ -51,7 +51,8 @@ class MapViewModel @Inject constructor(
                                 ),
                                 title = aqi.itemID,
                                 color = aqi.color,
-                                score = aqi.PM2_5.toInt()
+                                score = aqi.PM2_5.toInt(),
+                                icon = aqi.icon,
                             )
                         }.toList()
                     )
