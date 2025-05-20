@@ -1,4 +1,4 @@
-package com.example.aqbuddy.ui.provider.session_provider
+package com.example.aqbuddy.ui.provider.session
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider

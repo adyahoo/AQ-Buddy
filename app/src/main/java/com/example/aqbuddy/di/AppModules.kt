@@ -6,13 +6,14 @@ import com.example.aqbuddy.data.repository.FBaseProfileRepositoryImpl
 import com.example.aqbuddy.domain.repository.FBaseAuthRepository
 import com.example.aqbuddy.domain.repository.FBaseMapRepository
 import com.example.aqbuddy.domain.repository.FBaseProfileRepository
-import com.example.aqbuddy.ui.provider.session_provider.SessionStateHolder
-import com.google.firebase.Firebase
+import com.example.aqbuddy.ui.provider.session.SessionStateHolder
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.firestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 

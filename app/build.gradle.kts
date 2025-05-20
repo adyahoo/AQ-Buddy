@@ -101,4 +101,10 @@ dependencies {
     // Open Street Map
     implementation("org.osmdroid:osmdroid-android:6.1.16")
     implementation("tech.utsmankece:osm-android-compose:0.0.5")
+
+    // Permission
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
+
+    // Location
+    implementation("com.google.android.gms:play-services-location:21.1.0")
 }

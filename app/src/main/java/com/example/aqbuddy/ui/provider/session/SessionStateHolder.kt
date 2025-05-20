@@ -1,4 +1,4 @@
-package com.example.aqbuddy.ui.provider.session_provider
+package com.example.aqbuddy.ui.provider.session
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

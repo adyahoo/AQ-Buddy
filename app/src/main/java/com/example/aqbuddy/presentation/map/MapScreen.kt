@@ -17,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,7 +73,7 @@ fun RenderMap(
 ) {
     // define camera state
     val cameraState = rememberCameraState {
-        geoPoint = viewModel.currentGeoPoint
+        geoPoint = viewModel.currentGeoPoint.value
         zoom = 20.0
     }
 
@@ -140,7 +141,7 @@ fun RenderCurrentLocation(
             .clip(CircleShape)
             .background(Color.White)
             .clickable {
-                viewModel.getCurrentLocation()
+//                viewModel.getCurrentLocation()
             }
             .padding(8.dp)
     ) {

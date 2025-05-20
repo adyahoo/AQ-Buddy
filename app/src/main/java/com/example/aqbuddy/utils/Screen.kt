@@ -1,18 +1,18 @@
 package com.example.aqbuddy.utils
 
-import kotlinx.serialization.Serializable
-
-object Screen {
+sealed class Screen(val route: String) {
     // Session Management Route
-    @Serializable object SplashScreen
+     object SplashScreen: Screen("SplashScreen")
 
     // Unauthenticated Route
-    @Serializable object Unauthenticated
-    @Serializable object LoginScreen
-    @Serializable object RegisterScreen
+     object Unauthenticated: Screen("UnauthenticatedScreen")
+     object LoginScreen: Screen("LoginScreen")
+     object RegisterScreen: Screen("RegisterScreen")
 
     // Authenticated Route
-    @Serializable object Authenticated
-    @Serializable object HomeScreen
-    @Serializable object MapScreen
+     object Authenticated: Screen("AuthenticatedScreen")
+     object HomeScreen: Screen("HomeScreen")
+     object DashboardScreen: Screen("DashboardScreen")
+     object ProfileScreen: Screen("ProfileScreen")
+     object MapScreen: Screen("MapScreen")
 }

@@ -1,6 +1,12 @@
 package com.example.aqbuddy.utils
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.Settings
 import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.example.aqbuddy.ui.theme.aqiGoodColor
 import com.example.aqbuddy.ui.theme.aqiHazardousColor
 import com.example.aqbuddy.ui.theme.aqiModerateColor
@@ -19,3 +25,22 @@ fun Double.getAqiColor(): Color {
         else -> aqiModerateColor
     }
 }
+
+fun Context.isPermissionGranted(permission: String): Boolean {
+    return ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED
+}
+
+fun Context.gotoApplicationSettings() {
+    startActivity(Intent().apply {
+        action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+        data = "package:${packageName}".toUri()
+    })
+}
+
+fun Context.hasLocationPermission() =
+    PermissionUtils.locationPermissions.all {
+        ContextCompat.checkSelfPermission(
+            this,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
+    }

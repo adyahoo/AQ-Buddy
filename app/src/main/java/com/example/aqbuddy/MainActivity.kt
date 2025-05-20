@@ -13,15 +13,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.aqbuddy.presentation.dashboard.DashboardScreen
 import com.example.aqbuddy.presentation.home.HomeScreen
 import com.example.aqbuddy.presentation.login.LoginScreen
 import com.example.aqbuddy.presentation.map.MapScreen
+import com.example.aqbuddy.presentation.profile.ProfileScreen
 import com.example.aqbuddy.presentation.register.RegisterScreen
 import com.example.aqbuddy.presentation.splash.SplashScreen
-import com.example.aqbuddy.ui.provider.session_provider.LocalSessionState
-import com.example.aqbuddy.ui.provider.session_provider.SessionProvider
-import com.example.aqbuddy.ui.provider.session_provider.SessionState
-import com.example.aqbuddy.ui.provider.session_provider.SessionStateHolder
+import com.example.aqbuddy.ui.provider.session.LocalSessionState
+import com.example.aqbuddy.ui.provider.session.SessionProvider
+import com.example.aqbuddy.ui.provider.session.SessionState
+import com.example.aqbuddy.ui.provider.session.SessionStateHolder
 import com.example.aqbuddy.ui.theme.AppTheme
 import com.example.aqbuddy.utils.Screen
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,8 +51,8 @@ class MainActivity : ComponentActivity() {
 
                             SessionState.LoggedIn -> {
                                 LaunchedEffect(Unit) {
-                                    navController.navigate(Screen.Authenticated) {
-                                        popUpTo(Screen.SplashScreen) {
+                                    navController.navigate(Screen.Authenticated.route) {
+                                        popUpTo(Screen.SplashScreen.route) {
                                             inclusive = true
                                             saveState = false
                                         }
@@ -60,8 +62,8 @@ class MainActivity : ComponentActivity() {
 
                             SessionState.LoggedOut -> {
                                 LaunchedEffect(Unit) {
-                                    navController.navigate(Screen.Unauthenticated) {
-                                        popUpTo(Screen.SplashScreen) {
+                                    navController.navigate(Screen.Unauthenticated.route) {
+                                        popUpTo(Screen.SplashScreen.route) {
                                             inclusive = true
                                             saveState = false
                                         }
@@ -72,25 +74,34 @@ class MainActivity : ComponentActivity() {
 
                         NavHost(
                             navController = navController,
-                            startDestination = Screen.SplashScreen,
+                            startDestination = Screen.SplashScreen.route,
                             modifier = Modifier.padding(innerPadding)
                         ) {
-                            composable<Screen.SplashScreen> {
+                            composable(route = Screen.SplashScreen.route) {
                                 SplashScreen()
                             }
-                            navigation<Screen.Authenticated>(startDestination = Screen.MapScreen) {
-                                composable<Screen.HomeScreen> {
-                                    HomeScreen(navController = navController)
+                            navigation(
+                                route = Screen.Authenticated.route,
+                                startDestination = Screen.DashboardScreen.route
+                            ) {
+                                composable(route = Screen.DashboardScreen.route) {
+                                    DashboardScreen(navController)
                                 }
-                                composable<Screen.MapScreen> {
+                                composable(route = Screen.ProfileScreen.route) {
+                                    ProfileScreen(navController)
+                                }
+                                composable(route = Screen.MapScreen.route) {
                                     MapScreen(navController = navController)
                                 }
                             }
-                            navigation<Screen.Unauthenticated>(startDestination = Screen.LoginScreen) {
-                                composable<Screen.LoginScreen> {
+                            navigation(
+                                route = Screen.Unauthenticated.route,
+                                startDestination = Screen.LoginScreen.route
+                            ) {
+                                composable(route = Screen.LoginScreen.route) {
                                     LoginScreen(navController = navController)
                                 }
-                                composable<Screen.RegisterScreen> {
+                                composable(route = Screen.RegisterScreen.route) {
                                     RegisterScreen(navController = navController)
                                 }
                             }

@@ -4,8 +4,8 @@ import com.example.aqbuddy.data.local.MySharedPref
 import com.example.aqbuddy.domain.model.User
 import com.example.aqbuddy.domain.repository.FBaseAuthRepository
 import com.example.aqbuddy.domain.repository.FBaseProfileRepository
-import com.example.aqbuddy.ui.provider.session_provider.SessionState
-import com.example.aqbuddy.ui.provider.session_provider.SessionStateHolder
+import com.example.aqbuddy.ui.provider.session.SessionState
+import com.example.aqbuddy.ui.provider.session.SessionStateHolder
 import com.example.aqbuddy.utils.Constants
 import com.example.aqbuddy.utils.Resource
 import kotlinx.coroutines.flow.Flow

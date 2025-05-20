@@ -149,7 +149,7 @@ fun LoginScreen(
             fontStyle = MaterialTheme.typography.bodyLarge.fontStyle,
             modifier = Modifier
                 .clickable {
-                    navController.navigate(Screen.RegisterScreen)
+                    navController.navigate(Screen.RegisterScreen.route)
                 }
         )
     }
