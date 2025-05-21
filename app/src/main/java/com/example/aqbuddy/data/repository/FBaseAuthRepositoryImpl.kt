@@ -17,4 +17,5 @@ class FBaseAuthRepositoryImpl @Inject constructor(
         return auth.signInWithEmailAndPassword(email, password).await()
     }
 
+    override suspend fun logout() = auth.signOut()
 }

@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Abc
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.MyLocation
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,6 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +39,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.OpenStreetMap
-import com.utsman.osmandcompose.OsmAndroidComposable
 import com.utsman.osmandcompose.rememberCameraState
 
 @Composable
@@ -88,11 +90,20 @@ fun RenderMap(
     viewModel: MapViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    var isMapLoaded by remember {
+        mutableStateOf(false)
+    }
 
     // define camera state
     val cameraState = rememberCameraState {
-        geoPoint = viewModel.currentGeoPoint.value
+        geoPoint = viewModel.curGeoPoint.value
         zoom = 15.0
+    }
+
+    LaunchedEffect(key1 = viewModel.curGeoPoint.value) {
+       if (isMapLoaded){
+           cameraState.animateTo(viewModel.curGeoPoint.value)
+       }
     }
 
     // map node
@@ -101,6 +112,8 @@ fun RenderMap(
         cameraState = cameraState,
         onFirstLoadListener = {
             viewModel.getNearbyAqi()
+            viewModel.getCurrentLocation()
+            isMapLoaded = true
         }
     ) {
         for (marker in viewModel.state.value.markers) {
@@ -160,7 +173,7 @@ fun RenderCurrentLocation(
             .clip(CircleShape)
             .background(Color.White)
             .clickable {
-//                viewModel.getCurrentLocation()
+                viewModel.getCurrentLocation()
             }
             .padding(8.dp)
     ) {

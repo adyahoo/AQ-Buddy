@@ -43,12 +43,12 @@ fun ProfileScreen(
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = "Nama: Maul",
+            text = "Nama: ${viewModel.user.value?.name}",
             fontSize = 16.sp,
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "NIM: 24/536366/PTK/15779",
+            text = "Email: ${viewModel.user.value?.email}",
             fontSize = 16.sp,
         )
         Spacer(modifier = Modifier.weight(1f))

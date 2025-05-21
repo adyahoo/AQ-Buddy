@@ -28,7 +28,7 @@ class MapViewModel @Inject constructor(
     private var fusedLocationProviderClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
     private val _state = mutableStateOf(MapState())
-    private val _curLoc = mutableStateOf(
+    private val _curGeoPoint = mutableStateOf(
         GeoPoint(
             -7.75819934849922,
             110.37242862161,
@@ -36,7 +36,7 @@ class MapViewModel @Inject constructor(
     )
 
     val state: State<MapState> = _state
-    val currentGeoPoint: State<GeoPoint> = _curLoc
+    val curGeoPoint: State<GeoPoint> = _curGeoPoint
 
     fun getNearbyAqi() {
         mapUseCase.invoke().onEach {
@@ -77,14 +77,16 @@ class MapViewModel @Inject constructor(
     @SuppressLint("MissingPermission")
     fun getCurrentLocation() {
         val accuracy = Priority.PRIORITY_HIGH_ACCURACY
-        val curLoc = fusedLocationProviderClient.getCurrentLocation(
+        val currentLoc = fusedLocationProviderClient.getCurrentLocation(
             accuracy,
             CancellationTokenSource().token
         )
 
-        _curLoc.value = GeoPoint(
-            curLoc.result.latitude,
-            curLoc.result.longitude
-        )
+        currentLoc.addOnSuccessListener {
+            _curGeoPoint.value = GeoPoint(
+                it.latitude,
+                it.longitude
+            )
+        }
     }
 }
