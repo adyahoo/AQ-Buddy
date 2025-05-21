@@ -37,9 +37,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.aqbuddy.R
 import com.utsman.osmandcompose.Marker
+import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
 import com.utsman.osmandcompose.rememberCameraState
+import org.osmdroid.util.GeoPoint
 
 @Composable
 fun MapScreen(
@@ -96,14 +99,14 @@ fun RenderMap(
 
     // define camera state
     val cameraState = rememberCameraState {
-        geoPoint = viewModel.curGeoPoint.value
+        geoPoint = viewModel.curGeoPoint.value ?: GeoPoint(0, 0)
         zoom = 15.0
     }
 
     LaunchedEffect(key1 = viewModel.curGeoPoint.value) {
-       if (isMapLoaded){
-           cameraState.animateTo(viewModel.curGeoPoint.value)
-       }
+        if (isMapLoaded && viewModel.curGeoPoint.value != null) {
+            cameraState.animateTo(viewModel.curGeoPoint.value!!)
+        }
     }
 
     // map node
@@ -111,11 +114,23 @@ fun RenderMap(
         modifier = modifier.fillMaxSize(),
         cameraState = cameraState,
         onFirstLoadListener = {
-            viewModel.getNearbyAqi()
-            viewModel.getCurrentLocation()
+            viewModel.initMap()
+
             isMapLoaded = true
         }
     ) {
+        if (viewModel.curGeoPoint.value != null) {
+            Marker(
+                id = "Current User Location",
+                state = MarkerState(
+                    geoPoint = viewModel.curGeoPoint.value!!
+                ),
+                icon = context.getDrawable(
+                    R.drawable.twotone_person_pin_circle_24
+                )
+            )
+        }
+
         for (marker in viewModel.state.value.markers) {
             Marker(
                 id = marker.title,

@@ -28,22 +28,27 @@ class MapViewModel @Inject constructor(
     private var fusedLocationProviderClient: FusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
     private val _state = mutableStateOf(MapState())
-    private val _curGeoPoint = mutableStateOf(
-        GeoPoint(
-            -7.75819934849922,
-            110.37242862161,
-        )
-    )
+    private val _curGeoPoint = mutableStateOf<GeoPoint?>(null)
 
     val state: State<MapState> = _state
-    val curGeoPoint: State<GeoPoint> = _curGeoPoint
+    val curGeoPoint: State<GeoPoint?> = _curGeoPoint
 
-    fun getNearbyAqi() {
+    fun initMap() {
+        getNearbyAqi()
+        getCurrentLocation(
+            onSuccess = {
+                _state.value = _state.value.copy(
+                    isLoading = false
+                )
+            }
+        )
+    }
+
+    private fun getNearbyAqi() {
         mapUseCase.invoke().onEach {
             when (it) {
                 is Resource.Success -> {
                     _state.value = MapState(
-                        isLoading = false,
                         markers = it.data!!.map { aqi ->
                             MarkerMapState(
                                 state = MarkerState(
@@ -61,7 +66,6 @@ class MapViewModel @Inject constructor(
                 is Resource.Error -> {
                     _state.value = MapState(
                         error = it.error,
-                        isLoading = false
                     )
                 }
 
@@ -75,7 +79,9 @@ class MapViewModel @Inject constructor(
     }
 
     @SuppressLint("MissingPermission")
-    fun getCurrentLocation() {
+    fun getCurrentLocation(
+        onSuccess: () -> Unit = {}
+    ) {
         val accuracy = Priority.PRIORITY_HIGH_ACCURACY
         val currentLoc = fusedLocationProviderClient.getCurrentLocation(
             accuracy,
@@ -87,6 +93,8 @@ class MapViewModel @Inject constructor(
                 it.latitude,
                 it.longitude
             )
+
+            onSuccess()
         }
     }
 }
