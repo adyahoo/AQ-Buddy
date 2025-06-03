@@ -1,5 +1,6 @@
 package com.example.aqbuddy.presentation.map
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,6 +42,8 @@ import com.example.aqbuddy.R
 import com.utsman.osmandcompose.Marker
 import com.utsman.osmandcompose.MarkerState
 import com.utsman.osmandcompose.OpenStreetMap
+import com.utsman.osmandcompose.Polygon
+import com.utsman.osmandcompose.Polyline
 import com.utsman.osmandcompose.rememberCameraState
 import org.osmdroid.util.GeoPoint
 
@@ -98,26 +101,29 @@ fun RenderMap(
     }
 
     // define camera state
-    val cameraState = rememberCameraState {
+    viewModel.cameraState = rememberCameraState {
         geoPoint = viewModel.curGeoPoint.value ?: GeoPoint(0, 0)
         zoom = 15.0
     }
 
     LaunchedEffect(key1 = viewModel.curGeoPoint.value) {
         if (isMapLoaded && viewModel.curGeoPoint.value != null) {
-            cameraState.animateTo(viewModel.curGeoPoint.value!!)
+            viewModel.cameraState.animateTo(viewModel.curGeoPoint.value!!)
         }
     }
 
     // map node
     OpenStreetMap(
         modifier = modifier.fillMaxSize(),
-        cameraState = cameraState,
+        cameraState = viewModel.cameraState,
         onFirstLoadListener = {
             viewModel.initMap()
 
             isMapLoaded = true
-        }
+        },
+        onMapClick = {
+            viewModel.onMapClicked(it)
+        },
     ) {
         if (viewModel.curGeoPoint.value != null) {
             Marker(
@@ -128,6 +134,25 @@ fun RenderMap(
                 icon = context.getDrawable(
                     R.drawable.twotone_person_pin_circle_24
                 )
+            )
+        }
+
+        if (viewModel.clickedPoint.value != null) {
+            Marker(
+                id = "Clicked Location",
+                state = MarkerState(
+                    geoPoint = viewModel.clickedPoint.value!!
+                ),
+                icon = context.getDrawable(
+                    R.drawable.clicked_pin
+                )
+            )
+        }
+
+        if (viewModel.state.value.routes != null && viewModel.state.value.routes!!.isNotEmpty()) {
+            Log.d("masuk routes", "${viewModel.state.value.routes}")
+            Polyline(
+                geoPoints = viewModel.state.value.routes!!
             )
         }
 
@@ -181,14 +206,14 @@ fun RenderBackButton(
 @Composable
 fun RenderCurrentLocation(
     modifier: Modifier = Modifier,
-    viewModel: MapViewModel = hiltViewModel()
+    viewModel: MapViewModel = hiltViewModel(),
 ) {
     Box(
         modifier = modifier
             .clip(CircleShape)
             .background(Color.White)
             .clickable {
-                viewModel.getCurrentLocation()
+                viewModel.moveToCurrentLocation()
             }
             .padding(8.dp)
     ) {

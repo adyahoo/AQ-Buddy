@@ -3,11 +3,13 @@ package com.example.aqbuddy.presentation.map
 import androidx.compose.ui.graphics.Color
 import com.example.aqbuddy.R
 import com.utsman.osmandcompose.MarkerState
+import org.osmdroid.util.GeoPoint
 
 data class MapState(
     val markers: List<MarkerMapState> = emptyList(),
     val isLoading: Boolean = true,
-    val error: String? = null
+    val error: String? = null,
+    val routes: List<GeoPoint>? = emptyList()
 )
 
 data class MarkerMapState(
