@@ -107,4 +107,10 @@ dependencies {
 
     // Location
     implementation("com.google.android.gms:play-services-location:21.3.0")
+
+    // Biometric
+    implementation("androidx.biometric:biometric:1.2.0-alpha04")
+
+    // AppCompat
+    implementation("androidx.appcompat:appcompat:1.7.0")
 }

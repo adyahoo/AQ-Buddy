@@ -110,7 +110,7 @@ class MapViewModel @Inject constructor(
     }
 
     fun onMapClicked(point: GeoPoint) {
-        _clickedPoint.value = point
+//        _clickedPoint.value = point
 
         val start = "${_curGeoPoint.value!!.longitude},${_curGeoPoint.value!!.latitude}"
         val end = "${point.longitude},${point.latitude}"
@@ -118,12 +118,14 @@ class MapViewModel @Inject constructor(
         routeServiceUseCase.invoke(start, end).onEach {
             when (it) {
                 is Resource.Success -> {
-                    moveToCurrentLocation()
+//                    moveToCurrentLocation()
                     _state.value = _state.value.copy(
                         routes = it.data,
                         isLoading = false,
                         error = null
                     )
+
+                    _clickedPoint.value = it.data?.last()
                 }
 
                 is Resource.Error -> {
@@ -132,6 +134,8 @@ class MapViewModel @Inject constructor(
                         error = it.error,
                         isLoading = false
                     )
+
+                    _clickedPoint.value = point
                 }
 
                 is Resource.Loading -> {

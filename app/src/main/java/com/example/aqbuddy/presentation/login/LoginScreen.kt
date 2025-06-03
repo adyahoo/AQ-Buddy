@@ -2,6 +2,8 @@ package com.example.aqbuddy.presentation.login
 
 import android.content.Context
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
+import androidx.biometric.BiometricManager
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +41,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import androidx.navigation.NavController
 import com.example.aqbuddy.utils.Screen
 
@@ -48,6 +51,8 @@ fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val activity = LocalActivity.current as? FragmentActivity
+
     ShowToast()
     ShowToastSuccess()
     Column(
@@ -152,6 +157,28 @@ fun LoginScreen(
                     navController.navigate(Screen.RegisterScreen.route)
                 }
         )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier.fillMaxWidth(),
+            enabled = viewModel.isFingerprintEnabled == BiometricManager.BIOMETRIC_SUCCESS,
+            onClick = {
+                viewModel.loginBiometric(activity)
+            }
+        ) {
+            if (viewModel.isAuthenticating) {
+                CircularProgressIndicator(
+                    color = Color.White,
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(16.dp)
+                )
+            } else {
+                Text(
+                    text = "Use Fingerprint",
+                    fontStyle = MaterialTheme.typography.labelLarge.fontStyle,
+                )
+            }
+        }
     }
 }
 
