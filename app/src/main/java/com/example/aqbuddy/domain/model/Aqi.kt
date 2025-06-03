@@ -10,7 +10,8 @@ data class AqiData(
     val location: GeoPoint,
     val PM2_5: Double,
     val color: Color,
-    val icon: Int
+    val icon: Int,
+    var radius: List<GeoPoint>? = null
 ) {
     companion object {
         fun from(map: Map<String, Any>) = AqiData(

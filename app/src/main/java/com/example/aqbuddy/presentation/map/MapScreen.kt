@@ -177,6 +177,16 @@ fun RenderMap(
                     )
                 }
             }
+            if (marker.radius != null) {
+                Polygon(
+                    geoPoints = marker.radius,
+                    color = Color.Transparent,
+                    outlineColor = Color.Red,
+                    onClick = {
+                        viewModel.onMapClicked(marker.state.geoPoint)
+                    }
+                )
+            }
         }
     }
 }

@@ -18,6 +18,7 @@ data class MarkerMapState(
     val icon: Int? = null,
     val color: Color? = null,
     val score: Int = 0,
+    val radius: List<GeoPoint>? = null
 )
 
 data class MapLegend(
