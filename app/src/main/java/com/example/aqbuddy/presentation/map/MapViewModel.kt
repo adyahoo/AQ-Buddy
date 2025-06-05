@@ -2,6 +2,7 @@ package com.example.aqbuddy.presentation.map
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -35,18 +36,24 @@ class MapViewModel @Inject constructor(
     private val _state = mutableStateOf(MapState())
     private val _curGeoPoint = mutableStateOf<GeoPoint?>(null)
     private val _clickedPoint = mutableStateOf<GeoPoint?>(null)
+    private val _isMapLoaded = mutableStateOf(false)
 
     val state: State<MapState> = _state
     val curGeoPoint: State<GeoPoint?> = _curGeoPoint
     val clickedPoint: State<GeoPoint?> = _clickedPoint
+    val isMapLoaded: State<Boolean> = _isMapLoaded
 
     fun initMap() {
         getNearbyAqi()
         getCurrentLocation(
             onSuccess = {
-                _state.value = _state.value.copy(
-                    isLoading = false
-                )
+                Handler().postDelayed({
+//                    _state.value = _state.value.copy(
+//                        isLoading = false
+//                    )
+                    Log.d("masuk success curloc", "loading: false")
+                    _isMapLoaded.value = true
+                }, 500)
             }
         )
     }
@@ -67,7 +74,8 @@ class MapViewModel @Inject constructor(
                                 icon = aqi.icon,
                                 radius = aqi.radius
                             )
-                        }.toList()
+                        }.toList(),
+                        isLoading = false,
                     )
                 }
 
@@ -81,6 +89,7 @@ class MapViewModel @Inject constructor(
                     _state.value = MapState(
                         isLoading = true
                     )
+                    Log.d("masuk loading nearby aqi", "loading: true")
                 }
             }
         }.launchIn(viewModelScope)
@@ -111,26 +120,24 @@ class MapViewModel @Inject constructor(
     }
 
     fun onMapClicked(point: GeoPoint) {
-//        _clickedPoint.value = point
-
         val start = "${_curGeoPoint.value!!.longitude},${_curGeoPoint.value!!.latitude}"
         val end = "${point.longitude},${point.latitude}"
 
         routeServiceUseCase.invoke(start, end).onEach {
             when (it) {
                 is Resource.Success -> {
-//                    moveToCurrentLocation()
                     _state.value = _state.value.copy(
                         routes = it.data,
                         isLoading = false,
                         error = null
                     )
+                    Log.d("masuk success", "loading: false")
 
                     _clickedPoint.value = it.data?.last()
                 }
 
                 is Resource.Error -> {
-                    Log.d("masuk error", "${it.error}")
+                    Log.d("masuk map click error", "${it.error}")
                     _state.value = _state.value.copy(
                         error = it.error,
                         isLoading = false
@@ -143,6 +150,7 @@ class MapViewModel @Inject constructor(
                     _state.value = _state.value.copy(
                         isLoading = true
                     )
+                    Log.d("masuk map click loading", "loading: true")
                 }
             }
         }.launchIn(viewModelScope)

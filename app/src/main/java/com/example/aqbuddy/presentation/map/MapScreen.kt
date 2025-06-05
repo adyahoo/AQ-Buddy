@@ -96,9 +96,6 @@ fun RenderMap(
     viewModel: MapViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    var isMapLoaded by remember {
-        mutableStateOf(false)
-    }
 
     // define camera state
     viewModel.cameraState = rememberCameraState {
@@ -106,8 +103,8 @@ fun RenderMap(
         zoom = 15.0
     }
 
-    LaunchedEffect(key1 = viewModel.curGeoPoint.value) {
-        if (isMapLoaded && viewModel.curGeoPoint.value != null) {
+    LaunchedEffect(key1 = viewModel.curGeoPoint.value, key2 = viewModel.isMapLoaded.value) {
+        if (viewModel.isMapLoaded.value && viewModel.curGeoPoint.value != null) {
             viewModel.cameraState.animateTo(viewModel.curGeoPoint.value!!)
         }
     }
@@ -118,8 +115,6 @@ fun RenderMap(
         cameraState = viewModel.cameraState,
         onFirstLoadListener = {
             viewModel.initMap()
-
-            isMapLoaded = true
         },
         onMapClick = {
             viewModel.onMapClicked(it)

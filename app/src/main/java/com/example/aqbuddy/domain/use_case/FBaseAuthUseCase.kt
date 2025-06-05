@@ -151,8 +151,8 @@ class GetUserUseCase @Inject constructor(
                 emit(
                     Resource.Success(
                         User(
-                            name = user?.displayName ?: "-",
-                            email = user?.email ?: "-",
+                            name = user?.displayName ?: "User",
+                            email = user?.email ?: "user@biometric.com",
                             photoUrl = user?.photoUrl.toString()
                         )
                     )
